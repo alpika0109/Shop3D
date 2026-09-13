@@ -65,3 +65,20 @@ def encode(text,merges):
         new_token = merges_token_to_pair[pair]
         tokens = merge(tokens,pair,new_token)
     return tokens
+if __name__ == "__main__":
+    with open("text.txt", "r", encoding="utf-8") as f:
+        text = f.read() 
+    vocab_size = 276
+    tokens,merges = train(text,vocab_size,True)
+    print(f"\nCompressed from {len(text)} tokens to {len(tokens)} tokens")
+    print(f"Compression Ratio: {len(text)/len(tokens)}")
+    print(f"New Vocab Size: {vocab_size} ({vocab_size-255} token increase)\n")
+
+    text = "We are accounted poor citizens"
+    print(f"\nText: {text} ({len(text)})")
+    tokens = list(text.encode('utf-8'))
+    print(f"Tokens: {tokens} ({len(tokens)})")
+    e = encode(text,merges)
+    print(f"Encoded: {e} ({len(e)})")
+    d = decode(e,merges)
+    print(f"Decoded: {"".join(d)} ({len(d)})")
