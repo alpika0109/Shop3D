@@ -1,0 +1,795 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "a617d884",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[15, 7, 7, 26, 4, 15, 2, 3, 2]\n",
+      "hii there\n"
+     ]
+    }
+   ],
+   "source": [
+    "# basic char level tokenziation \n",
+    "\n",
+    "chars = \"qwertyuiopasdfghjklzxcvbnm \"\n",
+    "\n",
+    "# stoi and itos creat the mapping for encoding and decoding between characters and the integers that represent them\n",
+    "stoi = { ch:i for i,ch in enumerate(chars) }\n",
+    "itos = { i:ch for i,ch in enumerate(chars) }\n",
+    "encode = lambda s: [stoi[c] for c in s] # encoder: take a string, output a list of integers\n",
+    "decode = lambda l: ''.join([itos[i] for i in l]) # decoder: take a list of integers, output a string\n",
+    "\n",
+    "s = \"hii there\"\n",
+    "e = encode(s)\n",
+    "print(e)\n",
+    "print(decode(encode(s)))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "0d9ff327",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "ord('h') = 104\n",
+      "ord('🤗') = 129303\n",
+      "ord('안') = 50504\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Get Unicode code point for English character\n",
+    "print(f\"ord('h') = {ord('h')}\")\n",
+    "\n",
+    "# Get Unicode code point for emoji\n",
+    "print(f\"ord('🤗') = {ord('🤗')}\")\n",
+    "\n",
+    "# Get Unicode code point for Korean character\n",
+    "print(f\"ord('안') = {ord('안')}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "8d279b85",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "UTF-8: [236, 149, 136, 235, 133, 149, 237, 149, 152, 236, 132, 184, 236, 154, 148, 32, 240, 159, 145, 139, 32, 104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 32, 240, 159, 164, 151]\n",
+      "UTF-16: [255, 254, 72, 197, 85, 177, 88, 213, 56, 193, 148, 198, 32, 0, 61, 216, 75, 220, 32, 0, 104, 0, 101, 0, 108, 0, 108, 0, 111, 0, 32, 0, 119, 0, 111, 0, 114, 0, 108, 0, 100, 0, 32, 0, 62, 216, 23, 221]\n",
+      "UTF-32: [255, 254, 0, 0, 72, 197, 0, 0, 85, 177, 0, 0, 88, 213, 0, 0, 56, 193, 0, 0, 148, 198, 0, 0, 32, 0, 0, 0, 75, 244, 1, 0, 32, 0, 0, 0, 104, 0, 0, 0, 101, 0, 0, 0, 108, 0, 0, 0, 108, 0, 0, 0, 111, 0, 0, 0, 32, 0, 0, 0, 119, 0, 0, 0, 111, 0, 0, 0, 114, 0, 0, 0, 108, 0, 0, 0, 100, 0, 0, 0, 32, 0, 0, 0, 23, 249, 1, 0]\n"
+     ]
+    }
+   ],
+   "source": [
+    "text = \"안녕하세요 👋 hello world 🤗\"\n",
+    "\n",
+    "# UTF-8 encoding\n",
+    "utf8_bytes = list(text.encode('utf-8'))\n",
+    "print(f\"UTF-8: {utf8_bytes}\")\n",
+    "\n",
+    "# UTF-16 encoding  \n",
+    "utf16_bytes = list(text.encode('utf-16'))\n",
+    "print(f\"UTF-16: {utf16_bytes}\")\n",
+    "\n",
+    "# UTF-32 encoding  \n",
+    "utf32_bytes = list(text.encode('utf-32'))\n",
+    "print(f\"UTF-32: {utf32_bytes}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "5929801d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "UTF-8: [104, 105, 32, 109, 121, 32, 110, 97, 109, 101, 32, 105, 115, 32, 104, 105]\n",
+      "UTF-16: [255, 254, 104, 0, 105, 0, 32, 0, 109, 0, 121, 0, 32, 0, 110, 0, 97, 0, 109, 0, 101, 0, 32, 0, 105, 0, 115, 0, 32, 0, 104, 0, 105, 0]\n",
+      "UTF-32: [255, 254, 0, 0, 104, 0, 0, 0, 105, 0, 0, 0, 32, 0, 0, 0, 109, 0, 0, 0, 121, 0, 0, 0, 32, 0, 0, 0, 110, 0, 0, 0, 97, 0, 0, 0, 109, 0, 0, 0, 101, 0, 0, 0, 32, 0, 0, 0, 105, 0, 0, 0, 115, 0, 0, 0, 32, 0, 0, 0, 104, 0, 0, 0, 105, 0, 0, 0]\n"
+     ]
+    }
+   ],
+   "source": [
+    "text = \"hi my name is hi\"\n",
+    "# UTF-8 encoding\n",
+    "utf8_bytes = list(text.encode('utf-8'))\n",
+    "print(f\"UTF-8: {utf8_bytes}\")\n",
+    "\n",
+    "# UTF-16 encoding  \n",
+    "utf16_bytes = list(text.encode('utf-16'))\n",
+    "print(f\"UTF-16: {utf16_bytes}\")\n",
+    "\n",
+    "# UTF-32 encoding  \n",
+    "utf32_bytes = list(text.encode('utf-32'))\n",
+    "print(f\"UTF-32: {utf32_bytes}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "fb16764a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'bytes'>\n",
+      "[104, 105]\n"
+     ]
+    }
+   ],
+   "source": [
+    "a = \"hi\".encode('utf-8')\n",
+    "print(type(a))\n",
+    "print(list(a)) # this is the base 10 representation of the string"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "67bcca3d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[104, 105, 32, 109, 121, 32, 110, 97, 109, 101, 32, 105, 115, 32, 104, 105]\n",
+      "16\n"
+     ]
+    }
+   ],
+   "source": [
+    "t = \"hi my name is hi\"\n",
+    "tokens = list(t.encode('utf-8'))\n",
+    "print(tokens)\n",
+    "print(len(tokens))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "04f57381",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[236, 149, 136, 235, 133, 149, 237, 149, 152]"
+      ]
+     },
+     "execution_count": 35,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "list(\"안녕하\".encode('utf-8')) #notice for how basic english its basically a mapping of char --> byte, but for these more complex characters, more bytes are required. This shows the variability of utf-8 "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "4410cf7d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[('Alice', 30), ('Bob', 32), ('Charlie', 35)]\n"
+     ]
+    }
+   ],
+   "source": [
+    "names = [\"Alice\", \"Bob\", \"Charlie\"]\n",
+    "ages = [30, 32, 35]\n",
+    "\n",
+    "zipped = zip(names, ages)\n",
+    "print(list(zipped))\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "id": "4d000987",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def get_stats(ids, counts=None):\n",
+    "    \"\"\"\n",
+    "    Given a list of integers, return a dictionary of counts of consecutive pairs\n",
+    "    Example: [1, 2, 3, 1, 2] -> {(1, 2): 2, (2, 3): 1, (3, 1): 1}\n",
+    "    Optionally allows to update an existing dictionary of counts\n",
+    "    \"\"\"\n",
+    "    counts = {} if counts is None else counts\n",
+    "    for pair in zip(ids, ids[1:]): # iterate consecutive elements\n",
+    "        counts[pair] = counts.get(pair, 0) + 1\n",
+    "    return counts"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "id": "ee15fffe",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Sample list: [1, 2, 3, 4, 5]\n",
+      "Consecutive pairs: [(1, 2), (2, 3), (3, 4), (4, 5)]\n",
+      "This is the 'Pythonic way' Andrej mentions for iterating consecutive elements\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Step 3a: Understand how zip(ids, ids[1:]) works for consecutive pairs\n",
+    "sample_list = [1, 2, 3, 4, 5]\n",
+    "consecutive_pairs = list(zip(sample_list, sample_list[1:]))\n",
+    "print(f\"Sample list: {sample_list}\")\n",
+    "print(f\"Consecutive pairs: {consecutive_pairs}\")\n",
+    "print(\"This is the 'Pythonic way' Andrej mentions for iterating consecutive elements\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "id": "52a8f0ca",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{(104, 105): 2,\n",
+       " (105, 32): 1,\n",
+       " (32, 109): 1,\n",
+       " (109, 121): 1,\n",
+       " (121, 32): 1,\n",
+       " (32, 110): 1,\n",
+       " (110, 97): 1,\n",
+       " (97, 109): 1,\n",
+       " (109, 101): 1,\n",
+       " (101, 32): 1,\n",
+       " (32, 105): 1,\n",
+       " (105, 115): 1,\n",
+       " (115, 32): 1,\n",
+       " (32, 104): 1}"
+      ]
+     },
+     "execution_count": 60,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "stats = get_stats(tokens)\n",
+    "stats"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "id": "af29d38f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Most frequent pair: (104, 105)\n",
+      "Occurs 2 times\n",
+      "This represents: 'h' + 'i'\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Step 4: Get the most frequent pair using max() function\n",
+    "most_frequent_pair = max(stats, key=stats.get)\n",
+    "print(f\"Most frequent pair: {most_frequent_pair}\")\n",
+    "print(f\"Occurs {stats[most_frequent_pair]} times\")\n",
+    "\n",
+    "# Convert bytes back to characters to see what this pair represents\n",
+    "char1 = chr(most_frequent_pair[0]) # use chr to go from byte -> char. use ord to go from char -> unicode code point/bytes in decimal.\n",
+    "char2 = chr(most_frequent_pair[1])\n",
+    "print(f\"This represents: '{char1}' + '{char2}'\")\n",
+    "\n",
+    "#  character --> code point <=> utf-8 byte representation (hex,decimal etc) are diff ways of representing the same char"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "id": "5aecf07e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Positions: [0, 14]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Step 4a: Verify the most frequent pair by finding its occurrences in the text\n",
+    "pair_to_find = most_frequent_pair  \n",
+    "\n",
+    "# Find all positions where this pair occurs\n",
+    "occurrences = []\n",
+    "for i in range(len(tokens) - 1):\n",
+    "    if tokens[i] == pair_to_find[0] and tokens[i + 1] == pair_to_find[1]:\n",
+    "        occurrences.append(i)\n",
+    "\n",
+    "print(f\"Positions: {occurrences}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "id": "04faab1e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Step 6: Implement the merge function\n",
+    "def merge(ids, pair, idx):\n",
+    "    \"\"\"\n",
+    "    In the list of integers (ids), replace all consecutive occurrences \n",
+    "    of pair with the new integer token idx\n",
+    "    Example: ids=[1, 2, 3, 1, 2], pair=(1, 2), idx=4 -> [4, 3, 4]\n",
+    "    \"\"\"\n",
+    "    newids = []\n",
+    "    i = 0\n",
+    "    while i < len(ids):\n",
+    "        # if not at the very last position AND the pair matches, replace it\n",
+    "        if ids[i] == pair[0] and i < len(ids) - 1 and ids[i+1] == pair[1]:\n",
+    "            newids.append(idx)\n",
+    "            i += 2  # skip over the pair\n",
+    "        else:\n",
+    "            newids.append(ids[i])\n",
+    "            i += 1\n",
+    "    return newids"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 72,
+   "id": "4b9dcc80",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Original length: 16\n",
+      "After merge length: 14\n",
+      "Reduction: 2 tokens\n",
+      "\n",
+      "Occurrences of new token 256: 2\n",
+      "Occurrences of old pair in original: 2\n",
+      "Occurrences of old pair in new tokens: 0\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Step 7: Apply merge to our actual tokens\n",
+    "# Merge the most frequent pair with token ID 256\n",
+    "\n",
+    "# Current tokens are 0-255 (256 possible values), so new token will be 256\n",
+    "new_token_id = 256\n",
+    "\n",
+    "tokens2 = merge(tokens, most_frequent_pair, new_token_id)\n",
+    "\n",
+    "# now repeat process with new token list\n",
+    "\n",
+    "print(f\"Original length: {len(tokens)}\")\n",
+    "print(f\"After merge length: {len(tokens2)}\")\n",
+    "print(f\"Reduction: {len(tokens) - len(tokens2)} tokens\")\n",
+    "\n",
+    "# Verify the merge worked\n",
+    "print(f\"\\nOccurrences of new token {new_token_id}: {tokens2.count(new_token_id)}\")\n",
+    "print(f\"Occurrences of old pair in original: {sum(1 for i in range(len(tokens)-1) if (tokens[i], tokens[i+1]) == most_frequent_pair)}\")\n",
+    "\n",
+    "# Verify old pair is gone\n",
+    "old_pair_count = sum(1 for i in range(len(tokens2)-1) if (tokens2[i], tokens2[i+1]) == most_frequent_pair)\n",
+    "print(f\"Occurrences of old pair in new tokens: {old_pair_count}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 73,
+   "id": "6e5b77f4",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[104, 105, 32, 109, 121, 32, 110, 97, 109, 101, 32, 105, 115, 32, 104, 105]"
+      ]
+     },
+     "execution_count": 73,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tokens"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 74,
+   "id": "b18338b9",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[256, 32, 109, 121, 32, 110, 97, 109, 101, 32, 105, 115, 32, 256]"
+      ]
+     },
+     "execution_count": 74,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tokens2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "295bb11c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# need to create"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 86,
+   "id": "98243332",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "BPE Training Progress:\n",
+      "Step 0: 16 tokens, vocab size: 256\n",
+      "Step 1: 14 tokens, vocab size: 257\n",
+      "Step 2: 13 tokens, vocab size: 258\n",
+      "  Merged pair: (256, 32) -> 257\n",
+      "Step 3: 12 tokens, vocab size: 259\n",
+      "  Merged pair: (257, 109) -> 258\n",
+      "Step 4: 11 tokens, vocab size: 260\n",
+      "  Merged pair: (258, 121) -> 259\n",
+      "Step 5: 10 tokens, vocab size: 261\n",
+      "  Merged pair: (259, 32) -> 260\n",
+      "\n",
+      "Final: 10 tokens, vocab size: 261\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Step 8: Iterate the BPE algorithm\n",
+    "# Now we repeat: find most common pair, merge it, repeat...\n",
+    "# Let's do a few more iterations\n",
+    "\n",
+    "current_tokens = tokens2\n",
+    "vocab_size = 257  # Started with 256, now have 257\n",
+    "\n",
+    "print(\"BPE Training Progress:\")\n",
+    "print(f\"Step 0: {len(tokens)} tokens, vocab size: 256\")\n",
+    "print(f\"Step 1: {len(current_tokens)} tokens, vocab size: {vocab_size}\")\n",
+    "\n",
+    "merges = {}\n",
+    "\n",
+    "# Do a few more iterations\n",
+    "for step in range(2, 6):  # Steps 2-5\n",
+    "    # Find most common pair\n",
+    "    stats = get_stats(current_tokens)\n",
+    "    if not stats:  # No more pairs to merge\n",
+    "        break\n",
+    "    \n",
+    "    most_frequent_pair = max(stats, key=stats.get)\n",
+    "    \n",
+    "    # Merge it\n",
+    "    current_tokens = merge(current_tokens, most_frequent_pair, vocab_size)\n",
+    "\n",
+    "    merges[vocab_size] = most_frequent_pair\n",
+    "    \n",
+    "    print(f\"Step {step}: {len(current_tokens)} tokens, vocab size: {vocab_size + 1}\")\n",
+    "    print(f\"  Merged pair: {most_frequent_pair} -> {vocab_size}\")\n",
+    "    \n",
+    "    vocab_size += 1\n",
+    "\n",
+    "print(f\"\\nFinal: {len(current_tokens)} tokens, vocab size: {vocab_size}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 87,
+   "id": "13dcb839",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{257: (256, 32), 258: (257, 109), 259: (258, 121), 260: (259, 32)}"
+      ]
+     },
+     "execution_count": 87,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "merges"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 77,
+   "id": "eb6f88b4",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Ā my name is Ā'"
+      ]
+     },
+     "execution_count": 77,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "''.join([chr(x) for x in tokens2])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 88,
+   "id": "8784ee76",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Token 257: (256, 32) -> 'Ā' + ' ' = 'Ā '\n",
+      "Token 258: (257, 109) -> 'ā' + 'm' = 'ām'\n",
+      "Token 259: (258, 121) -> 'Ă' + 'y' = 'Ăy'\n",
+      "Token 260: (259, 32) -> 'ă' + ' ' = 'ă '\n"
+     ]
+    }
+   ],
+   "source": [
+    "for token_id, (byte1, byte2) in merges.items():\n",
+    "    char1, char2 = chr(byte1), chr(byte2)\n",
+    "    print(f\"Token {token_id}: ({byte1}, {byte2}) -> '{char1}' + '{char2}' = '{char1}{char2}'\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 215,
+   "id": "921e62ac",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def count_pairs(tokens):\n",
+    "    counts = {}\n",
+    "    for pair in zip(tokens,tokens[1:]):\n",
+    "        counts[pair] = counts.get(pair,0) + 1\n",
+    "    return counts\n",
+    "\n",
+    "def merge(current_tokens,most_frequent_pair,new_token):\n",
+    "    new_token_list = []\n",
+    "    i = 0 \n",
+    "    while i < len(current_tokens):\n",
+    "        if current_tokens[i] == most_frequent_pair[0] and i < len(current_tokens)-1 and current_tokens[i+1] == most_frequent_pair[1]:    \n",
+    "            new_token_list.append(new_token)\n",
+    "            i += 2\n",
+    "        else:\n",
+    "            new_token_list.append(current_tokens[i])\n",
+    "            i += 1\n",
+    "    return new_token_list\n",
+    "\n",
+    "def train(text,vocab_size,verbose=False):\n",
+    "    tokens = list(text.encode(\"utf-8\"))\n",
+    "    num_merges = vocab_size - 256\n",
+    "    new_minted_token = 256\n",
+    "    merges = {}\n",
+    "    for i in range(num_merges):\n",
+    "        pair_counts = count_pairs(tokens)\n",
+    "        if not pair_counts:\n",
+    "            break \n",
+    "        most_frequent_pair = max(pair_counts,key=pair_counts.get)\n",
+    "        most_frequent_pair_str = \"\".join([chr(x) for x in most_frequent_pair])\n",
+    "        new_tokens = merge(tokens,most_frequent_pair,new_minted_token)\n",
+    "        if verbose:\n",
+    "            print(f\"Most Frequent Pair: {most_frequent_pair} == \\\"{most_frequent_pair_str}\\\" --> ({new_minted_token}) Occurs {pair_counts[most_frequent_pair]} times \")\n",
+    "        merges[new_minted_token] = most_frequent_pair\n",
+    "        tokens = new_tokens\n",
+    "        new_minted_token += 1\n",
+    "\n",
+    "    return tokens,merges\n",
+    "\n",
+    "def decode(tokens,merges):\n",
+    "    decoded_list = []\n",
+    "    for tkn in tokens:\n",
+    "        memo = []\n",
+    "        decoded_list.extend(decode_token(tkn,merges,memo))\n",
+    "    return decoded_list\n",
+    "\n",
+    "def decode_token(tkn,merges,memo):\n",
+    "    if tkn < 256:\n",
+    "        return chr(tkn)\n",
+    "    else:\n",
+    "        pair = merges.get(tkn)\n",
+    "        memo.append(decode_token(pair[0],merges,memo))\n",
+    "        memo.append(decode_token(pair[1],merges,memo))\n",
+    "        return memo\n",
+    "\n",
+    "def encode(text,merges):\n",
+    "    merges_token_to_pair = {pair: id for id, pair in merges.items()}\n",
+    "    tokens = list(text.encode('utf-8'))\n",
+    "    encoded_list = []\n",
+    "    while True:\n",
+    "        counts = count_pairs(tokens)\n",
+    "        pair = min(counts,key=lambda p: merges_token_to_pair.get(p,float('inf')))\n",
+    "        if pair not in merges_token_to_pair:\n",
+    "            break\n",
+    "        new_token = merges_token_to_pair[pair]\n",
+    "        tokens = merge(tokens,pair,new_token)\n",
+    "    return tokens\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 221,
+   "id": "3b5cfab2",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Most Frequent Pair: (101, 32) == \"e \" --> (256) Occurs 27643 times \n",
+      "Most Frequent Pair: (116, 104) == \"th\" --> (257) Occurs 22739 times \n",
+      "Most Frequent Pair: (116, 32) == \"t \" --> (258) Occurs 16508 times \n",
+      "Most Frequent Pair: (115, 32) == \"s \" --> (259) Occurs 15364 times \n",
+      "Most Frequent Pair: (100, 32) == \"d \" --> (260) Occurs 14165 times \n",
+      "Most Frequent Pair: (44, 32) == \", \" --> (261) Occurs 14098 times \n",
+      "Most Frequent Pair: (111, 117) == \"ou\" --> (262) Occurs 12730 times \n",
+      "Most Frequent Pair: (101, 114) == \"er\" --> (263) Occurs 11771 times \n",
+      "Most Frequent Pair: (105, 110) == \"in\" --> (264) Occurs 10606 times \n",
+      "Most Frequent Pair: (121, 32) == \"y \" --> (265) Occurs 10283 times \n",
+      "Most Frequent Pair: (97, 110) == \"an\" --> (266) Occurs 10197 times \n",
+      "Most Frequent Pair: (58, 10) == \":\n",
+      "\" --> (267) Occurs 8762 times \n",
+      "Most Frequent Pair: (111, 114) == \"or\" --> (268) Occurs 8458 times \n",
+      "Most Frequent Pair: (111, 32) == \"o \" --> (269) Occurs 8134 times \n",
+      "Most Frequent Pair: (101, 110) == \"en\" --> (270) Occurs 7568 times \n",
+      "Most Frequent Pair: (10, 10) == \"\n",
+      "\n",
+      "\" --> (271) Occurs 7098 times \n",
+      "Most Frequent Pair: (97, 114) == \"ar\" --> (272) Occurs 7081 times \n",
+      "Most Frequent Pair: (32, 257) == \" ā\" --> (273) Occurs 6662 times \n",
+      "Most Frequent Pair: (111, 110) == \"on\" --> (274) Occurs 6435 times \n",
+      "Most Frequent Pair: (108, 108) == \"ll\" --> (275) Occurs 6357 times \n",
+      "\n",
+      "Compressed from 1115394 tokens to 882737 tokens\n",
+      "Compression Ratio: 1.2635632130521322\n",
+      "New Vocab Size: 276 (21 token increase)\n",
+      "\n",
+      "\n",
+      "Text: We are accounted poor citizens (30)\n",
+      "Tokens: [87, 101, 32, 97, 114, 101, 32, 97, 99, 99, 111, 117, 110, 116, 101, 100, 32, 112, 111, 111, 114, 32, 99, 105, 116, 105, 122, 101, 110, 115] (30)\n",
+      "Encoded: [87, 256, 272, 256, 97, 99, 99, 262, 110, 116, 101, 260, 112, 111, 268, 32, 99, 105, 116, 105, 122, 270, 115] (23)\n",
+      "Decoded: ['W', 'e', ' ', 'a', 'r', 'e', ' ', 'a', 'c', 'c', 'o', 'u', 'n', 't', 'e', 'd', ' ', 'p', 'o', 'o', 'r', ' ', 'c', 'i', 't', 'i', 'z', 'e', 'n', 's'] (30)\n"
+     ]
+    }
+   ],
+   "source": [
+    "with open(\"text.txt\", \"r\", encoding=\"utf-8\") as f:\n",
+    "        text = f.read() \n",
+    "vocab_size = 276\n",
+    "tokens,merges = train(text,vocab_size,True)\n",
+    "print(f\"\\nCompressed from {len(text)} tokens to {len(tokens)} tokens\")\n",
+    "print(f\"Compression Ratio: {len(text)/len(tokens)}\")\n",
+    "print(f\"New Vocab Size: {vocab_size} ({vocab_size-255} token increase)\\n\")\n",
+    "\n",
+    "text = \"We are accounted poor citizens\"\n",
+    "print(f\"\\nText: {text} ({len(text)})\")\n",
+    "tokens = list(text.encode('utf-8'))\n",
+    "print(f\"Tokens: {tokens} ({len(tokens)})\")\n",
+    "e = encode(text,merges)\n",
+    "print(f\"Encoded: {e} ({len(e)})\")\n",
+    "d = decode(e,merges)\n",
+    "print(f\"Decoded: {d} ({len(d)})\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 222,
+   "id": "2c729eb5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Text: We  (3)\n",
+      "Tokens: [87, 101, 32] (3)\n",
+      "Encoded: [87, 256] (2)\n",
+      "Decoded: ['W', 'e', ' '] (3)\n"
+     ]
+    }
+   ],
+   "source": [
+    "text = \"We \"\n",
+    "print(f\"Text: {text} ({len(text)})\")\n",
+    "tokens = list(text.encode('utf-8'))\n",
+    "print(f\"Tokens: {tokens} ({len(tokens)})\")\n",
+    "e = encode(text,merges)\n",
+    "print(f\"Encoded: {e} ({len(e)})\")\n",
+    "d = decode(e,merges)\n",
+    "print(f\"Decoded: {d} ({len(d)})\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b740f848",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "base",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
