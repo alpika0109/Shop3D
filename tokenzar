@@ -245,7 +245,7 @@
    ],
    "source": [
     "# Step 3a: Understand how zip(ids, ids[1:]) works for consecutive pairs\n",
-    "sample_list = [1, 2, 3, 4, 5]\n",
+    "sample_list = [1, 2, 3, 4, 5,6]\n",
     "consecutive_pairs = list(zip(sample_list, sample_list[1:]))\n",
     "print(f\"Sample list: {sample_list}\")\n",
     "print(f\"Consecutive pairs: {consecutive_pairs}\")\n",
