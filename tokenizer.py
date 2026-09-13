@@ -38,4 +38,30 @@ def decode(tokens,merges):
     for tkn in tokens:
         memo = []
         decoded_list.extend(decode_token(tkn,merges,memo))
-    return decoded_list
+    retdef decode_token(tkn,merges,memo):
+    if tkn < 256:
+        return chr(tkn)
+    else:
+        pair = merges.get(tkn)
+        memo.append(decode_token(pair[0],merges,memo))
+        memo.append(decode_token(pair[1],merges,memo))
+        return memo
+def decode_token(tkn,merges,memo):
+    if tkn < 256:
+        return chr(tkn)
+    else:
+        pair = merges.get(tkn)
+        memo.append(decode_token(pair[0],merges,memo))
+        memo.append(decode_token(pair[1],merges,memo))
+        return memo
+def encode(text,merges):
+    merges_token_to_pair = {pair: id for id, pair in merges.items()}
+    tokens = list(text.encode('utf-8'))
+    while True:
+        counts = count_pairs(tokens)
+        pair = min(counts,key=lambda p: merges_token_to_pair.get(p,float('inf')))
+        if pair not in merges_token_to_pair:
+            break
+        new_token = merges_token_to_pair[pair]
+        tokens = merge(tokens,pair,new_token)
+    return tokens
