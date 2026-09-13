@@ -33,3 +33,9 @@ def train(text,vocab_size,verbose=False):
         new_minted_token += 1
 
     return tokens,merges
+def decode(tokens,merges):
+    decoded_list = []
+    for tkn in tokens:
+        memo = []
+        decoded_list.extend(decode_token(tkn,merges,memo))
+    return decoded_list
