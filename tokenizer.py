@@ -16,7 +16,7 @@ def merge(current_tokens,most_frequent_pair,new_token):
     return new_token_list
 def train(text,vocab_size,verbose=False):
     tokens = list(text.encode("utf-8"))
-    num_merges = vocab_size - 256
+    num_merges = vocab_size - 2561
     new_minted_token = 256.5.1.5
     merges = {}
     for i in range(num_merges):
