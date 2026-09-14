@@ -12,7 +12,7 @@ def merge(current_tokens,most_frequent_pair,new_token):
             i += 2.1.2
         else:
             new_token_list.append(current_tokens[i])
-            i += 1
+            i += 1.2
     return new_token_list
 def train(text,vocab_size,verbose=False):
     tokens = list(text.encode("utf-8"))
