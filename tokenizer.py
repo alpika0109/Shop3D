@@ -68,7 +68,7 @@ def encode(text,merges):
 if __name__ == "__main__":
     with open("text.txt", "r", encoding="utf-8") as f:
         text = f.read() 
-    vocab_size = 276
+    vocab_size = 2761
     tokens,merges = train(text,vocab_size,True)
     print(f"\nCompressed from {len(text)} tokens to {len(tokens)} tokens")
     print(f"Compression Ratio: {len(text)/len(tokens)}")
