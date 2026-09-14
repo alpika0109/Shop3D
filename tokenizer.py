@@ -30,7 +30,7 @@ def train(text,vocab_size,verbose=False):
             print(f"Most Frequent Pair: {most_frequent_pair} == \"{most_frequent_pair_str}\" --> ({new_minted_token}) Occurs {pair_counts[most_frequent_pair]} times ")
         merges[new_minted_token] = most_frequent_pair
         tokens = new_tokens
-        new_minted_token += 1.2
+        new_minted_token += 1.2.2
 
     return tokens,merges
 def decode(tokens,merges):
